@@ -10,7 +10,7 @@
 //  Copyright © 2015-2018 Clipy Project.
 //
 
-"Launch Clipy on system startup?" = "Launch Clipy on system startup?";
+"Launch Hako on system startup?" = "Launch Hako on system startup?";
 
 "You can change this setting in the Preferences if you want" = "You can change this setting in the Preferences if you want.";
 
@@ -28,7 +28,7 @@
 
 "Preferences" = "Preferences...";
 
-"Quit Clipy" = "Quit Clipy";
+"Quit Hako" = "Quit Hako";
 
 "History" = "History";
 
@@ -57,3 +57,70 @@
 "To do this action please allow Accessibility in Security Privacy preferences located in System Preferences" = "To do this action please allow Accessibility in Security & Privacy preferences, located in System Preferences.";
 
 "Open System Preferences" = "Open System Preferences";
+
+// MARK: - General
+"Login Item" = "Launch Hako on system startup";
+"Max History Size" = "Number of history items";
+"Input Paste Command" = "Input paste command after selection";
+"Reorder Clips" = "Reorder clips after pasting";
+"Show Status Bar Icon" = "Status bar icon";
+"Status Bar" = "Status Bar";
+"Paste" = "Paste";
+"None" = "None";
+"Black" = "Black";
+"White" = "White";
+
+// MARK: - Menu
+"Max Title Length" = "Max length of menu item title";
+"Inline Items" = "Number of items placed inline";
+"Folder Items" = "Number of items placed inside a folder";
+"Start With Zero" = "Menu items title start with zero";
+"Mark With Numbers" = "Menu items are marked with numbers";
+"Key Equivalents" = "Add numeric key equivalents";
+"Show Icon" = "Show icon in the menu";
+"Show Image" = "Show image in the menu";
+"Color Preview" = "Show color code preview";
+"Show Tooltip" = "Show tooltip on menu item";
+"Max Tooltip" = "Max length of tooltip";
+"Clear History Menu Item" = "Add clear history menu item";
+"Clear History Alert" = "Show alert before clearing history";
+"Overwrite Same" = "Overwrite same history";
+"Copy Same" = "Copy same history";
+"Layout" = "Layout";
+"Display" = "Display";
+"Tooltip" = "Tooltip";
+
+// MARK: - Type
+"Store Types" = "Clipboard types to store";
+
+// MARK: - Exclude
+"Excluded Apps" = "Excluded Applications";
+
+// MARK: - Shortcuts
+"Main Menu" = "Main Menu";
+
+// MARK: - Updates
+"Version" = "Version";
+"Auto Check Updates" = "Automatically check for updates";
+"Check Interval" = "Check interval";
+"Hourly" = "Hourly";
+"Daily" = "Daily";
+"Weekly" = "Weekly";
+"Monthly" = "Monthly";
+
+// MARK: - Beta
+"Beta" = "Beta";
+"Exclude App" = "Exclude App";
+"Paste Plain Text" = "Paste as plain text with modifier";
+"Paste Plain Modifier" = "Modifier";
+"Delete After Paste" = "Delete history after paste";
+"Paste And Delete" = "Paste and delete history";
+"Observe Screenshots" = "Observe screenshots";
+"Paste as Plain Text" = "Paste as Plain Text";
+"Delete History" = "Delete History";
+"Paste and Delete" = "Paste and Delete";
+"Screenshot" = "Screenshot";
+"Command" = "Command";
+"Shift" = "Shift";
+"Control" = "Control";
+"Option" = "Option";

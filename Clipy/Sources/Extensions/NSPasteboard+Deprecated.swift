@@ -11,40 +11,50 @@
 //
 
 import Cocoa
+import UniformTypeIdentifiers
 
-/**
- *  The contents of PasteboardType has been changed with swift 4.
- *  However, we will use the swift 3 style to keep compatibility with existing items
- *  Help wanted - If there is a good implementation I would like to replace it.
- **/
 extension NSPasteboard.PasteboardType {
 
     static var deprecatedString: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSStringPboardType")
+        return .string
     }
 
     static var deprecatedRTF: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSRTFPboardType")
+        return .rtf
     }
 
     static var deprecatedRTFD: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSRTFDPboardType")
+        return .rtfd
     }
 
     static var deprecatedPDF: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSPDFPboardType")
+        return .pdf
     }
 
     static var deprecatedFilenames: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")
+        return .fileURL
     }
 
     static var deprecatedURL: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSURLPboardType")
+        return .URL
     }
 
     static var deprecatedTIFF: NSPasteboard.PasteboardType {
-        return NSPasteboard.PasteboardType(rawValue: "NSTIFFPboardType")
+        return .tiff
     }
 
+    // MARK: - Legacy rawValue mapping for NSCoding compatibility
+    /// Maps old Swift 3-era rawValue strings stored in .data files to modern PasteboardType
+    static func fromLegacyRawValue(_ rawValue: String) -> NSPasteboard.PasteboardType? {
+        switch rawValue {
+        case "NSStringPboardType":      return .string
+        case "NSRTFPboardType":         return .rtf
+        case "NSRTFDPboardType":        return .rtfd
+        case "NSPDFPboardType":         return .pdf
+        case "NSFilenamesPboardType":   return .fileURL
+        case "NSURLPboardType":         return .URL
+        case "NSTIFFPboardType":        return .tiff
+        default:                        return NSPasteboard.PasteboardType(rawValue: rawValue)
+        }
+    }
 }

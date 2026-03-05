@@ -19,21 +19,21 @@ final class PasteService {
     // MARK: - Properties
     fileprivate let lock = NSRecursiveLock(name: "com.clipy-app.Clipy.Pastable")
     fileprivate var isPastePlainText: Bool {
-        guard AppEnvironment.current.defaults.bool(forKey: Constants.Beta.pastePlainText) else { return false }
+        guard AppState.shared.defaults.bool(forKey: Constants.Beta.pastePlainText) else { return false }
 
-        let modifierSetting = AppEnvironment.current.defaults.integer(forKey: Constants.Beta.pastePlainTextModifier)
+        let modifierSetting = AppState.shared.defaults.integer(forKey: Constants.Beta.pastePlainTextModifier)
         return isPressedModifier(modifierSetting)
     }
     fileprivate var isDeleteHistory: Bool {
-        guard AppEnvironment.current.defaults.bool(forKey: Constants.Beta.deleteHistory) else { return false }
+        guard AppState.shared.defaults.bool(forKey: Constants.Beta.deleteHistory) else { return false }
 
-        let modifierSetting = AppEnvironment.current.defaults.integer(forKey: Constants.Beta.deleteHistoryModifier)
+        let modifierSetting = AppState.shared.defaults.integer(forKey: Constants.Beta.deleteHistoryModifier)
         return isPressedModifier(modifierSetting)
     }
     fileprivate var isPasteAndDeleteHistory: Bool {
-        guard AppEnvironment.current.defaults.bool(forKey: Constants.Beta.pasteAndDeleteHistory) else { return false }
+        guard AppState.shared.defaults.bool(forKey: Constants.Beta.pasteAndDeleteHistory) else { return false }
 
-        let modifierSetting = AppEnvironment.current.defaults.integer(forKey: Constants.Beta.pasteAndDeleteHistoryModifier)
+        let modifierSetting = AppState.shared.defaults.integer(forKey: Constants.Beta.pasteAndDeleteHistoryModifier)
         return isPressedModifier(modifierSetting)
     }
 
@@ -55,9 +55,9 @@ final class PasteService {
 
 // MARK: - Copy
 extension PasteService {
-    func paste(with clip: CPYClip) {
-        guard !clip.isInvalidated else { return }
-        guard let data = NSKeyedUnarchiver.unarchiveObject(withFile: clip.dataPath) as? CPYClipData else { return }
+    @MainActor
+    func paste(with clip: ClipItem) {
+        guard let data = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(Data(contentsOf: URL(fileURLWithPath: clip.dataPath))) as? CPYClipData else { return }
 
         // Handling modifier actions
         let isPastePlainText = self.isPastePlainText
@@ -71,7 +71,7 @@ extension PasteService {
 
         // Increment change count for don't copy paste item
         if isPasteAndDeleteHistory {
-            AppEnvironment.current.clipService.incrementChangeCount()
+            AppState.shared.clipService.incrementChangeCount()
         }
         // Paste history
         if isPastePlainText {
@@ -83,7 +83,7 @@ extension PasteService {
         }
         // Delete clip
         if isDeleteHistory || isPasteAndDeleteHistory {
-            AppEnvironment.current.clipService.delete(with: clip)
+            AppState.shared.clipService.delete(with: clip)
         }
     }
 
@@ -95,10 +95,10 @@ extension PasteService {
         pasteboard.setString(string, forType: .deprecatedString)
     }
 
-    func copyToPasteboard(with clip: CPYClip) {
+    func copyToPasteboard(with clip: ClipItem) {
         lock.lock(); defer { lock.unlock() }
 
-        guard let data = NSKeyedUnarchiver.unarchiveObject(withFile: clip.dataPath) as? CPYClipData else { return }
+        guard let data = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(Data(contentsOf: URL(fileURLWithPath: clip.dataPath))) as? CPYClipData else { return }
 
         if isPastePlainText {
             copyToPasteboard(with: data.stringValue)
@@ -140,14 +140,14 @@ extension PasteService {
 // MARK: - Paste
 extension PasteService {
     func paste() {
-        guard AppEnvironment.current.defaults.bool(forKey: Constants.UserDefaults.inputPasteCommand) else { return }
+        guard AppState.shared.defaults.bool(forKey: Constants.UserDefaults.inputPasteCommand) else { return }
         // Check Accessibility Permission
-        guard AppEnvironment.current.accessibilityService.isAccessibilityEnabled(isPrompt: false) else {
-            AppEnvironment.current.accessibilityService.showAccessibilityAuthenticationAlert()
+        guard AppState.shared.accessibilityService.isAccessibilityEnabled(isPrompt: false) else {
+            AppState.shared.accessibilityService.showAccessibilityAuthenticationAlert()
             return
         }
 
-        let vKeyCode = Sauce.shared.keyCode(by: .v)
+        let vKeyCode = Sauce.shared.keyCode(for: .v)
         DispatchQueue.main.async {
             let source = CGEventSource(stateID: .combinedSessionState)
             // Disable local keyboard events while pasting

@@ -11,68 +11,55 @@
 //
 
 import Foundation
-import RxSwift
-import RealmSwift
-import PINCache
+import Combine
+import SwiftData
 
 final class DataCleanService {
 
     // MARK: - Properties
-    fileprivate var disposeBag = DisposeBag()
-    fileprivate let scheduler = SerialDispatchQueueScheduler(qos: .utility)
+    fileprivate var cancellables = Set<AnyCancellable>()
 
     // MARK: - Monitoring
     func startMonitoring() {
-        disposeBag = DisposeBag()
+        cancellables.removeAll()
         // Clean datas every 30 minutes
-        Observable<Int>.interval(60 * 30, scheduler: scheduler)
-            .subscribe(onNext: { [weak self] _ in
-                self?.cleanDatas()
-            })
-            .disposed(by: disposeBag)
+        Timer.publish(every: 60 * 30, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                MainActor.assumeIsolated { self?.cleanDatas() }
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Delete Data
+    @MainActor
     func cleanDatas() {
-        let realm = try! Realm()
-        let flowHistories = overflowingClips(with: realm)
-        flowHistories
-            .filter { !$0.isInvalidated && !$0.thumbnailPath.isEmpty }
-            .map { $0.thumbnailPath }
-            .forEach { PINCache.shared().removeObject(forKey: $0) }
-        realm.transaction { realm.delete(flowHistories) }
-        cleanFiles(with: realm)
+        let persistence = PersistenceController.shared
+        let maxHistorySize = AppState.shared.defaults.integer(forKey: Constants.UserDefaults.maxHistorySize)
+        let allClips = persistence.fetchClips(sortedBy: false) // newest first
+
+        if allClips.count > maxHistorySize {
+            let clipsToRemove = Array(allClips.dropFirst(maxHistorySize))
+            clipsToRemove
+                .filter { !$0.thumbnailPath.isEmpty }
+                .forEach { ImageCache.shared.removeObject(forKey: $0.thumbnailPath) }
+            clipsToRemove.forEach { persistence.deleteClip($0) }
+        }
+
+        cleanFiles()
     }
 
-    private func overflowingClips(with realm: Realm) -> Results<CPYClip> {
-        let clips = realm.objects(CPYClip.self).sorted(byKeyPath: #keyPath(CPYClip.updateTime), ascending: false)
-        let maxHistorySize = AppEnvironment.current.defaults.integer(forKey: Constants.UserDefaults.maxHistorySize)
-
-        if clips.count <= maxHistorySize { return realm.objects(CPYClip.self).filter("FALSEPREDICATE") }
-        // Delete first clip
-        let lastClip = clips[maxHistorySize - 1]
-        if lastClip.isInvalidated { return realm.objects(CPYClip.self).filter("FALSEPREDICATE") }
-
-        // Deletion target
-        let updateTime = lastClip.updateTime
-        let targetClips = realm.objects(CPYClip.self).filter("updateTime < %d", updateTime)
-
-        return targetClips
-    }
-
-    private func cleanFiles(with realm: Realm) {
+    @MainActor
+    private func cleanFiles() {
         let fileManager = FileManager.default
         guard let paths = try? fileManager.contentsOfDirectory(atPath: CPYUtilities.applicationSupportFolder()) else { return }
 
-        let allClipPaths = Array(realm.objects(CPYClip.self)
-            .filter { !$0.isInvalidated }
-            .compactMap { $0.dataPath.components(separatedBy: "/").last })
+        let persistence = PersistenceController.shared
+        let allClipPaths = Set(persistence.fetchClips().compactMap { $0.dataPath.components(separatedBy: "/").last })
 
         // Delete diff datas
-        DispatchQueue.main.async {
-            Set(allClipPaths).symmetricDifference(paths)
-                .map { CPYUtilities.applicationSupportFolder() + "/" + "\($0)" }
-                .forEach { CPYUtilities.deleteData(at: $0) }
-        }
+        Set(paths).subtracting(allClipPaths)
+            .map { CPYUtilities.applicationSupportFolder() + "/" + $0 }
+            .forEach { CPYUtilities.deleteData(at: $0) }
     }
 }

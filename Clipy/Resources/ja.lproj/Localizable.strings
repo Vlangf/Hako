@@ -10,7 +10,7 @@
 //  Copyright © 2015-2018 Clipy Project.
 //
 
-"Launch Clipy on system startup?" = "システム起動時にClipyを起動しますか?";
+"Launch Clipy on system startup?" = "システム起動時にHakoを起動しますか?";
 
 "You can change this setting in the Preferences if you want" = "この設定はいつでも変更できます";
 
@@ -28,7 +28,7 @@
 
 "Preferences" = "環境設定...";
 
-"Quit Clipy" = "Clipyを終了";
+"Quit Clipy" = "Hakoを終了";
 
 "History" = "履歴";
 
@@ -54,6 +54,73 @@
 
 "Please allow Accessibility" = "アクセシビリティを有効にしてください。";
 
-"To do this action please allow Accessibility in Security Privacy preferences located in System Preferences" = "この動作を行うためにはシステム環境設定の\"セキュリティとプライバシー\"環境設定で、Clipyへのアクセシビリティのアクセスを許可してください。";
+"To do this action please allow Accessibility in Security Privacy preferences located in System Preferences" = "この動作を行うためにはシステム環境設定の\"セキュリティとプライバシー\"環境設定で、Hakoへのアクセシビリティのアクセスを許可してください。";
 
 "Open System Preferences" = "\"システム環境設定\"を開く";
+
+// MARK: - General
+"Login Item" = "システム起動時にHakoを起動";
+"Max History Size" = "履歴の最大件数";
+"Input Paste Command" = "選択後にペーストコマンドを入力";
+"Reorder Clips" = "ペースト後にクリップを並び替え";
+"Show Status Bar Icon" = "ステータスバーアイコン";
+"Status Bar" = "ステータスバー";
+"Paste" = "ペースト";
+"None" = "なし";
+"Black" = "黒";
+"White" = "白";
+
+// MARK: - Menu
+"Max Title Length" = "メニュー項目タイトルの最大長";
+"Inline Items" = "インラインに配置する項目数";
+"Folder Items" = "フォルダ内に配置する項目数";
+"Start With Zero" = "メニュー項目をゼロから開始";
+"Mark With Numbers" = "メニュー項目に番号を表示";
+"Key Equivalents" = "数字キーのショートカットを追加";
+"Show Icon" = "メニューにアイコンを表示";
+"Show Image" = "メニューに画像を表示";
+"Color Preview" = "カラーコードプレビューを表示";
+"Show Tooltip" = "メニュー項目にツールチップを表示";
+"Max Tooltip" = "ツールチップの最大長";
+"Clear History Menu Item" = "履歴クリアメニュー項目を追加";
+"Clear History Alert" = "履歴クリア前に確認";
+"Overwrite Same" = "同一履歴を上書き";
+"Copy Same" = "同一履歴をコピー";
+"Layout" = "レイアウト";
+"Display" = "表示";
+"Tooltip" = "ツールチップ";
+
+// MARK: - Type
+"Store Types" = "保存するクリップボードの種類";
+
+// MARK: - Exclude
+"Excluded Apps" = "除外アプリケーション";
+
+// MARK: - Shortcuts
+"Main Menu" = "メインメニュー";
+
+// MARK: - Updates
+"Version" = "バージョン";
+"Auto Check Updates" = "自動的にアップデートを確認";
+"Check Interval" = "確認間隔";
+"Hourly" = "1時間ごと";
+"Daily" = "毎日";
+"Weekly" = "毎週";
+"Monthly" = "毎月";
+
+// MARK: - Beta
+"Beta" = "ベータ";
+"Exclude App" = "除外アプリ";
+"Paste Plain Text" = "修飾キーでプレーンテキストとしてペースト";
+"Paste Plain Modifier" = "修飾キー";
+"Delete After Paste" = "ペースト後に履歴を削除";
+"Paste And Delete" = "ペーストして履歴を削除";
+"Observe Screenshots" = "スクリーンショットを監視";
+"Paste as Plain Text" = "プレーンテキストとしてペースト";
+"Delete History" = "履歴を削除";
+"Paste and Delete" = "ペーストして削除";
+"Screenshot" = "スクリーンショット";
+"Command" = "Command";
+"Shift" = "Shift";
+"Control" = "Control";
+"Option" = "Option";

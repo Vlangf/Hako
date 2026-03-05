@@ -16,9 +16,9 @@ struct Constants {
 
     struct Application {
         #if DEBUG
-            static let name = "ClipyDEBUG"
+            static let name = "HakoDEBUG"
         #else
-            static let name = "Clipy"
+            static let name = "Hako"
         #endif
         static let appcastURL = URL(string: "https://clipy-app.com/appcast.xml")!
     }
@@ -66,7 +66,6 @@ struct Constants {
         static let copySameHistory = "kCPYPrefCopySameHistroy"
         static let suppressAlertForDeleteSnippet = "kCPYSuppressAlertForDeleteSnippet"
         static let excludeApplications = "kCPYExcludeApplications"
-        static let collectCrashReport = "kCPYCollectCrashReport"
         static let showColorPreviewInTheMenu = "kCPYPrefShowColorPreviewInTheMenu"
     }
 

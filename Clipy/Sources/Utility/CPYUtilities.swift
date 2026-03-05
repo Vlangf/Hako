@@ -11,19 +11,15 @@
 //
 
 import Cocoa
-import RealmSwift
-import Fabric
-import Crashlytics
+import os
+
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.clipy-app.Clipy", category: "Utilities")
 
 final class CPYUtilities {
 
     static func initSDKs() {
-        // Fabric
-        AppEnvironment.current.defaults.register(defaults: ["NSApplicationCrashOnExceptions": true])
-        if AppEnvironment.current.defaults.bool(forKey: Constants.UserDefaults.collectCrashReport) {
-            Fabric.with([Answers.self, Crashlytics.self])
-            CPYUtilities.sendCustomLog(with: "applicationDidFinishLaunching")
-        }
+        AppState.shared.defaults.register(defaults: ["NSApplicationCrashOnExceptions": true])
+        logger.info("applicationDidFinishLaunching")
     }
 
     static func registerUserDefaultKeys() {
@@ -38,7 +34,6 @@ final class CPYUtilities {
         defaultValues.updateValue(AppDelegate.storeTypesDictinary(), forKey: Constants.UserDefaults.storeTypes)
         defaultValues.updateValue(NSNumber(value: true), forKey: Constants.UserDefaults.inputPasteCommand)
         defaultValues.updateValue(NSNumber(value: true), forKey: Constants.UserDefaults.reorderClipsAfterPasting)
-        defaultValues.updateValue(NSNumber(value: true), forKey: Constants.UserDefaults.collectCrashReport)
 
         /* Menu */
         defaultValues.updateValue(NSNumber(value: 16), forKey: Constants.UserDefaults.menuIconSize)
@@ -73,8 +68,8 @@ final class CPYUtilities {
         defaultValues.updateValue(NSNumber(value: 0), forKey: Constants.Beta.pasteAndDeleteHistoryModifier)
         defaultValues.updateValue(NSNumber(value: false), forKey: Constants.Beta.observerScreenshot)
 
-        AppEnvironment.current.defaults.register(defaults: defaultValues)
-        AppEnvironment.current.defaults.synchronize()
+        AppState.shared.defaults.register(defaults: defaultValues)
+        AppState.shared.defaults.synchronize()
     }
 
     static func applicationSupportFolder() -> String {
@@ -107,8 +102,6 @@ final class CPYUtilities {
     }
 
     static func sendCustomLog(with name: String) {
-        if AppEnvironment.current.defaults.bool(forKey: Constants.UserDefaults.collectCrashReport) {
-            Answers.logCustomEvent(withName: name, customAttributes: nil)
-        }
+        logger.info("\(name, privacy: .public)")
     }
 }

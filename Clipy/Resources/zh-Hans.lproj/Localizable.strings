@@ -10,7 +10,7 @@
 //  Copyright © 2015-2018 Clipy Project.
 //
 
-"Launch Clipy on system startup?" = "系统启动时打开 Clipy?";
+"Launch Clipy on system startup?" = "系统启动时打开 Hako?";
 
 "You can change this setting in the Preferences if you want" = "如有需要可在偏好设置中修改本设置。";
 
@@ -28,7 +28,7 @@
 
 "Preferences" = "偏好设置...";
 
-"Quit Clipy" = "退出 Clipy";
+"Quit Clipy" = "退出 Hako";
 
 "History" = "历史";
 
@@ -56,4 +56,71 @@
 
 "To do this action please allow Accessibility in Security Privacy preferences located in System Preferences" = "To do this action please allow Accessibility in Security & Privacy preferences, located in System Preferences.";
 
-"Open System Preferences" = "Open System Preferences";
+"Open System Preferences" = "打开系统偏好设置";
+
+// MARK: - General
+"Login Item" = "系统启动时启动 Hako";
+"Max History Size" = "历史记录数量";
+"Input Paste Command" = "选择后输入粘贴命令";
+"Reorder Clips" = "粘贴后重新排序剪贴";
+"Show Status Bar Icon" = "状态栏图标";
+"Status Bar" = "状态栏";
+"Paste" = "粘贴";
+"None" = "无";
+"Black" = "黑色";
+"White" = "白色";
+
+// MARK: - Menu
+"Max Title Length" = "菜单项标题最大长度";
+"Inline Items" = "内联显示的项目数";
+"Folder Items" = "文件夹内的项目数";
+"Start With Zero" = "菜单项标题从零开始";
+"Mark With Numbers" = "菜单项标记数字";
+"Key Equivalents" = "添加数字快捷键";
+"Show Icon" = "在菜单中显示图标";
+"Show Image" = "在菜单中显示图片";
+"Color Preview" = "显示颜色代码预览";
+"Show Tooltip" = "在菜单项上显示工具提示";
+"Max Tooltip" = "工具提示最大长度";
+"Clear History Menu Item" = "添加清除历史菜单项";
+"Clear History Alert" = "清除历史前显示提示";
+"Overwrite Same" = "覆盖相同历史";
+"Copy Same" = "复制相同历史";
+"Layout" = "布局";
+"Display" = "显示";
+"Tooltip" = "工具提示";
+
+// MARK: - Type
+"Store Types" = "存储的剪贴板类型";
+
+// MARK: - Exclude
+"Excluded Apps" = "排除的应用程序";
+
+// MARK: - Shortcuts
+"Main Menu" = "主菜单";
+
+// MARK: - Updates
+"Version" = "版本";
+"Auto Check Updates" = "自动检查更新";
+"Check Interval" = "检查间隔";
+"Hourly" = "每小时";
+"Daily" = "每天";
+"Weekly" = "每周";
+"Monthly" = "每月";
+
+// MARK: - Beta
+"Beta" = "测试版";
+"Exclude App" = "排除应用";
+"Paste Plain Text" = "使用修饰键粘贴为纯文本";
+"Paste Plain Modifier" = "修饰键";
+"Delete After Paste" = "粘贴后删除历史";
+"Paste And Delete" = "粘贴并删除历史";
+"Observe Screenshots" = "监视截屏";
+"Paste as Plain Text" = "粘贴为纯文本";
+"Delete History" = "删除历史";
+"Paste and Delete" = "粘贴并删除";
+"Screenshot" = "截屏";
+"Command" = "Command";
+"Shift" = "Shift";
+"Control" = "Control";
+"Option" = "Option";

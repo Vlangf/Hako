@@ -12,73 +12,73 @@
 
 import Foundation
 import Cocoa
-import RealmSwift
-import PINCache
-import RxSwift
-import RxCocoa
-import RxOptional
+import SwiftData
+import Combine
 
 final class ClipService {
 
     // MARK: - Properties
-    fileprivate var cachedChangeCount = BehaviorRelay<Int>(value: 0)
+    fileprivate var cachedChangeCount: Int = 0
     fileprivate var storeTypes = [String: NSNumber]()
-    fileprivate let scheduler = SerialDispatchQueueScheduler(qos: .userInteractive)
     fileprivate let lock = NSRecursiveLock(name: "com.clipy-app.Clipy.ClipUpdatable")
-    fileprivate var disposeBag = DisposeBag()
+    fileprivate var cancellables = Set<AnyCancellable>()
 
     // MARK: - Clips
     func startMonitoring() {
-        disposeBag = DisposeBag()
+        cancellables.removeAll()
         // Pasteboard observe timer
-        Observable<Int>.interval(0.75, scheduler: scheduler)
+        Timer.publish(every: 0.75, on: .main, in: .common)
+            .autoconnect()
+            .receive(on: DispatchQueue.global(qos: .userInteractive))
             .map { _ in NSPasteboard.general.changeCount }
-            .withLatestFrom(cachedChangeCount.asObservable()) { ($0, $1) }
-            .filter { $0 != $1 }
-            .subscribe(onNext: { [weak self] changeCount, _ in
-                self?.cachedChangeCount.accept(changeCount)
+            .filter { [weak self] changeCount in
+                guard let self = self else { return false }
+                return changeCount != self.cachedChangeCount
+            }
+            .sink { [weak self] changeCount in
+                self?.cachedChangeCount = changeCount
                 self?.create()
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &cancellables)
         // Store types
-        AppEnvironment.current.defaults.rx
-            .observe([String: NSNumber].self, Constants.UserDefaults.storeTypes)
-            .filterNil()
-            .asDriver(onErrorDriveWith: .empty())
-            .drive(onNext: { [weak self] in
+        UserDefaults.standard.publisher(for: \.kCPYPrefStoreTypesKey)
+            .compactMap { $0 as? [String: NSNumber] }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
                 self?.storeTypes = $0
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &cancellables)
     }
 
+    @MainActor
     func clearAll() {
-        let realm = try! Realm()
-        let clips = realm.objects(CPYClip.self)
+        let persistence = PersistenceController.shared
+        let clips = persistence.fetchClips()
 
         // Delete saved images
         clips
             .filter { !$0.thumbnailPath.isEmpty }
             .map { $0.thumbnailPath }
-            .forEach { PINCache.shared().removeObject(forKey: $0) }
-        // Delete Realm
-        realm.transaction { realm.delete(clips) }
+            .forEach { ImageCache.shared.removeObject(forKey: $0) }
+        // Delete SwiftData
+        persistence.deleteAllClips()
         // Delete writed datas
-        AppEnvironment.current.dataCleanService.cleanDatas()
+        AppState.shared.dataCleanService.cleanDatas()
     }
 
-    func delete(with clip: CPYClip) {
-        let realm = try! Realm()
+    @MainActor
+    func delete(with clip: ClipItem) {
         // Delete saved images
         let path = clip.thumbnailPath
         if !path.isEmpty {
-            PINCache.shared().removeObject(forKey: path)
+            ImageCache.shared.removeObject(forKey: path)
         }
-        // Delete Realm
-        realm.transaction { realm.delete(clip) }
+        // Delete SwiftData
+        PersistenceController.shared.deleteClip(clip)
     }
 
     func incrementChangeCount() {
-        cachedChangeCount.accept(cachedChangeCount.value + 1)
+        cachedChangeCount += 1
     }
 
 }
@@ -96,9 +96,9 @@ extension ClipService {
         if types.isEmpty { return }
 
         // Excluded application
-        guard !AppEnvironment.current.excludeAppService.frontProcessIsExcludedApplication() else { return }
+        guard !AppState.shared.excludeAppService.frontProcessIsExcludedApplication() else { return }
         // Special applications
-        guard !AppEnvironment.current.excludeAppService.copiedProcessIsExcludedApplications(pasteboard: pasteboard) else { return }
+        guard !AppState.shared.excludeAppService.copiedProcessIsExcludedApplications(pasteboard: pasteboard) else { return }
 
         // Create data
         let data = CPYClipData(pasteboard: pasteboard, types: types)
@@ -114,49 +114,51 @@ extension ClipService {
     }
 
     fileprivate func save(with data: CPYClipData) {
-        let realm = try! Realm()
-        // Copy already copied history
-        let isCopySameHistory = AppEnvironment.current.defaults.bool(forKey: Constants.UserDefaults.copySameHistory)
-        if realm.object(ofType: CPYClip.self, forPrimaryKey: "\(data.hash)") != nil, !isCopySameHistory { return }
-        // Don't save invalidated clip
-        if let clip = realm.object(ofType: CPYClip.self, forPrimaryKey: "\(data.hash)"), clip.isInvalidated { return }
-
         // Don't save empty string history
         if data.isOnlyStringType && data.stringValue.isEmpty { return }
 
         // Overwrite same history
-        let isOverwriteHistory = AppEnvironment.current.defaults.bool(forKey: Constants.UserDefaults.overwriteSameHistory)
+        let defaults = AppState.shared.defaults
+        let isOverwriteHistory = defaults.bool(forKey: Constants.UserDefaults.overwriteSameHistory)
+        let isCopySameHistory = defaults.bool(forKey: Constants.UserDefaults.copySameHistory)
         let savedHash = (isOverwriteHistory) ? data.hash : Int(arc4random() % 1000000)
 
         // Saved time and path
         let unixTime = Int(Date().timeIntervalSince1970)
         let savedPath = CPYUtilities.applicationSupportFolder() + "/\(NSUUID().uuidString).data"
-        // Create Realm object
-        let clip = CPYClip()
-        clip.dataPath = savedPath
-        clip.title = data.stringValue[0...10000]
-        clip.dataHash = "\(savedHash)"
-        clip.updateTime = unixTime
-        clip.primaryType = data.primaryType?.rawValue ?? ""
 
         DispatchQueue.main.async {
+            let persistence = PersistenceController.shared
+
+            // Copy already copied history
+            if persistence.fetchClip(byHash: "\(data.hash)") != nil, !isCopySameHistory { return }
+
+            // Create ClipItem
+            let clip = ClipItem(
+                dataPath: savedPath,
+                title: data.stringValue[0...10000],
+                dataHash: "\(savedHash)",
+                primaryType: data.primaryType?.rawValue ?? "",
+                updateTime: unixTime
+            )
+
             // Save thumbnail image
             if let thumbnailImage = data.thumbnailImage {
-                PINCache.shared().setObject(thumbnailImage, forKey: "\(unixTime)")
+                ImageCache.shared.setObject(thumbnailImage, forKey: "\(unixTime)")
                 clip.thumbnailPath = "\(unixTime)"
             }
             if let colorCodeImage = data.colorCodeImage {
-                PINCache.shared().setObject(colorCodeImage, forKey: "\(unixTime)")
+                ImageCache.shared.setObject(colorCodeImage, forKey: "\(unixTime)")
                 clip.thumbnailPath = "\(unixTime)"
                 clip.isColorCode = true
             }
-            // Save Realm and .data file
-            let dispatchRealm = try! Realm()
+            // Save .data file and SwiftData
             if CPYUtilities.prepareSaveToPath(CPYUtilities.applicationSupportFolder()) {
-                if NSKeyedArchiver.archiveRootObject(data, toFile: savedPath) {
-                    dispatchRealm.transaction {
-                        dispatchRealm.add(clip, update: true)
-                    }
+                if let archived = try? NSKeyedArchiver.archivedData(withRootObject: data, requiringSecureCoding: false) {
+                    do {
+                        try archived.write(to: URL(fileURLWithPath: savedPath))
+                        persistence.addClip(clip)
+                    } catch {}
                 }
             }
         }
@@ -172,5 +174,12 @@ extension ClipService {
         guard let value = dictionary[type] else { return false }
         guard let number = storeTypes[value] else { return false }
         return number.boolValue
+    }
+}
+
+// MARK: - KVO key for UserDefaults
+private extension UserDefaults {
+    @objc var kCPYPrefStoreTypesKey: Any? {
+        return object(forKey: "kCPYPrefStoreTypesKey")
     }
 }

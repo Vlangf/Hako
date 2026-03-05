@@ -10,11 +10,11 @@
 //  Copyright © 2015-2018 Clipy Project.
 //
 
-"Launch Clipy on system startup?" = "Vuoi avviare Clipy al login?";
+"Launch Clipy on system startup?" = "Vuoi avviare Hako al login?";
 
 "You can change this setting in the Preferences if you want" = "Puoi modificare questa impostazione nelle Preferenze.";
 
-"Launch on system startup" = "Avvia Clipy al login";
+"Launch on system startup" = "Avvia Hako al login";
 
 "Don't Launch" = "Non avviare";
 
@@ -28,7 +28,7 @@
 
 "Preferences" = "Preferenze...";
 
-"Quit Clipy" = "Esci da Clipy";
+"Quit Clipy" = "Esci da Hako";
 
 "History" = "Cronologia";
 
@@ -56,4 +56,71 @@
 
 "To do this action please allow Accessibility in Security Privacy preferences located in System Preferences" = "To do this action please allow Accessibility in Security & Privacy preferences, located in System Preferences.";
 
-"Open System Preferences" = "Open System Preferences";
+"Open System Preferences" = "Apri Preferenze di Sistema";
+
+// MARK: - General
+"Login Item" = "Avvia Hako all'avvio del sistema";
+"Max History Size" = "Numero di elementi nella cronologia";
+"Input Paste Command" = "Inserisci comando incolla dopo la selezione";
+"Reorder Clips" = "Riordina clip dopo aver incollato";
+"Show Status Bar Icon" = "Icona barra di stato";
+"Status Bar" = "Barra di stato";
+"Paste" = "Incolla";
+"None" = "Nessuna";
+"Black" = "Nera";
+"White" = "Bianca";
+
+// MARK: - Menu
+"Max Title Length" = "Lunghezza massima del titolo menu";
+"Inline Items" = "Numero di elementi in linea";
+"Folder Items" = "Numero di elementi nella cartella";
+"Start With Zero" = "Titoli menu partono da zero";
+"Mark With Numbers" = "Segna elementi menu con numeri";
+"Key Equivalents" = "Aggiungi scorciatoie numeriche";
+"Show Icon" = "Mostra icona nel menu";
+"Show Image" = "Mostra immagine nel menu";
+"Color Preview" = "Mostra anteprima codice colore";
+"Show Tooltip" = "Mostra tooltip sugli elementi menu";
+"Max Tooltip" = "Lunghezza massima tooltip";
+"Clear History Menu Item" = "Aggiungi voce svuota cronologia";
+"Clear History Alert" = "Mostra avviso prima di svuotare";
+"Overwrite Same" = "Sovrascrivi cronologia uguale";
+"Copy Same" = "Copia cronologia uguale";
+"Layout" = "Layout";
+"Display" = "Visualizzazione";
+"Tooltip" = "Tooltip";
+
+// MARK: - Type
+"Store Types" = "Tipi di appunti da salvare";
+
+// MARK: - Exclude
+"Excluded Apps" = "Applicazioni escluse";
+
+// MARK: - Shortcuts
+"Main Menu" = "Menu Principale";
+
+// MARK: - Updates
+"Version" = "Versione";
+"Auto Check Updates" = "Controlla automaticamente gli aggiornamenti";
+"Check Interval" = "Intervallo di controllo";
+"Hourly" = "Ogni ora";
+"Daily" = "Ogni giorno";
+"Weekly" = "Ogni settimana";
+"Monthly" = "Ogni mese";
+
+// MARK: - Beta
+"Beta" = "Beta";
+"Exclude App" = "Escludi App";
+"Paste Plain Text" = "Incolla come testo semplice con modificatore";
+"Paste Plain Modifier" = "Modificatore";
+"Delete After Paste" = "Elimina cronologia dopo aver incollato";
+"Paste And Delete" = "Incolla ed elimina cronologia";
+"Observe Screenshots" = "Osserva screenshot";
+"Paste as Plain Text" = "Incolla come Testo Semplice";
+"Delete History" = "Elimina Cronologia";
+"Paste and Delete" = "Incolla ed Elimina";
+"Screenshot" = "Screenshot";
+"Command" = "Command";
+"Shift" = "Shift";
+"Control" = "Control";
+"Option" = "Option";

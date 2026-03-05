@@ -1,0 +1,66 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+
+      - name: Resolve SPM packages
+        run: xcodebuild -resolvePackageDependencies -project Clipy.xcodeproj -scheme Clipy
+
+      - name: Build Release
+        run: |
+          xcodebuild -project Clipy.xcodeproj \
+            -scheme Clipy \
+            -configuration Release \
+            -arch arm64 \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Create DMG
+        run: |
+          APP_PATH="build/Build/Products/Release/Clipy.app"
+          DMG_NAME="Hako-${GITHUB_REF_NAME}.dmg"
+
+          # Create a temporary folder for DMG contents
+          mkdir -p dmg_contents
+          cp -R "$APP_PATH" dmg_contents/
+          ln -s /Applications dmg_contents/Applications
+
+          # Create DMG
+          hdiutil create -volname "Hako" \
+            -srcfolder dmg_contents \
+            -ov -format UDZO \
+            "$DMG_NAME"
+
+          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+
+      - name: Create ZIP
+        run: |
+          APP_PATH="build/Build/Products/Release/Clipy.app"
+          ZIP_NAME="Hako-${GITHUB_REF_NAME}.zip"
+          cd build/Build/Products/Release
+          zip -r -y "../../../../$ZIP_NAME" Clipy.app
+          cd ../../../..
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Hako ${{ github.ref_name }}"
+          generate_release_notes: true
+          files: |
+            ${{ env.DMG_NAME }}
+            ${{ env.ZIP_NAME }}

@@ -10,7 +10,7 @@
 //  Copyright © 2015-2018 Clipy Project.
 //
 
-"Launch Clipy on system startup?" = "Clipy beim Starten öffnen?";
+"Launch Clipy on system startup?" = "Hako beim Starten öffnen?";
 
 "You can change this setting in the Preferences if you want" = "Sie können diese Option in den Einstellungen ändern.";
 
@@ -28,7 +28,7 @@
 
 "Preferences" = "Einstellungen...";
 
-"Quit Clipy" = "Clipy beenden";
+"Quit Clipy" = "Hako beenden";
 
 "History" = "Verlauf";
 
@@ -56,4 +56,71 @@
 
 "To do this action please allow Accessibility in Security Privacy preferences located in System Preferences" = "To do this action please allow Accessibility in Security & Privacy preferences, located in System Preferences.";
 
-"Open System Preferences" = "Open System Preferences";
+"Open System Preferences" = "Systemeinstellungen öffnen";
+
+// MARK: - General
+"Login Item" = "Hako beim Systemstart starten";
+"Max History Size" = "Anzahl der Verlaufseinträge";
+"Input Paste Command" = "Einfügebefehl nach Auswahl eingeben";
+"Reorder Clips" = "Clips nach dem Einfügen neu ordnen";
+"Show Status Bar Icon" = "Statusleisten-Symbol";
+"Status Bar" = "Statusleiste";
+"Paste" = "Einfügen";
+"None" = "Keins";
+"Black" = "Schwarz";
+"White" = "Weiß";
+
+// MARK: - Menu
+"Max Title Length" = "Maximale Länge des Menütitels";
+"Inline Items" = "Anzahl inline platzierter Einträge";
+"Folder Items" = "Anzahl der Einträge im Ordner";
+"Start With Zero" = "Menüeinträge beginnen bei Null";
+"Mark With Numbers" = "Menüeinträge mit Nummern markieren";
+"Key Equivalents" = "Numerische Tastenkürzel hinzufügen";
+"Show Icon" = "Symbol im Menü anzeigen";
+"Show Image" = "Bild im Menü anzeigen";
+"Color Preview" = "Farbcode-Vorschau anzeigen";
+"Show Tooltip" = "Tooltip bei Menüeinträgen anzeigen";
+"Max Tooltip" = "Maximale Tooltip-Länge";
+"Clear History Menu Item" = "Menüeintrag zum Löschen des Verlaufs";
+"Clear History Alert" = "Warnung vor dem Löschen des Verlaufs";
+"Overwrite Same" = "Gleichen Verlauf überschreiben";
+"Copy Same" = "Gleichen Verlauf kopieren";
+"Layout" = "Layout";
+"Display" = "Anzeige";
+"Tooltip" = "Tooltip";
+
+// MARK: - Type
+"Store Types" = "Zu speichernde Zwischenablagetypen";
+
+// MARK: - Exclude
+"Excluded Apps" = "Ausgeschlossene Anwendungen";
+
+// MARK: - Shortcuts
+"Main Menu" = "Hauptmenü";
+
+// MARK: - Updates
+"Version" = "Version";
+"Auto Check Updates" = "Automatisch nach Updates suchen";
+"Check Interval" = "Prüfintervall";
+"Hourly" = "Stündlich";
+"Daily" = "Täglich";
+"Weekly" = "Wöchentlich";
+"Monthly" = "Monatlich";
+
+// MARK: - Beta
+"Beta" = "Beta";
+"Exclude App" = "App ausschließen";
+"Paste Plain Text" = "Als reinen Text mit Modifikator einfügen";
+"Paste Plain Modifier" = "Modifikator";
+"Delete After Paste" = "Verlauf nach dem Einfügen löschen";
+"Paste And Delete" = "Einfügen und Verlauf löschen";
+"Observe Screenshots" = "Screenshots beobachten";
+"Paste as Plain Text" = "Als reinen Text einfügen";
+"Delete History" = "Verlauf löschen";
+"Paste and Delete" = "Einfügen und Löschen";
+"Screenshot" = "Screenshot";
+"Command" = "Command";
+"Shift" = "Shift";
+"Control" = "Control";
+"Option" = "Option";
