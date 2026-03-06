@@ -1,8 +1,8 @@
-# Hako
+<p align="center">
+  <img src="Resources/hako_logo.png" alt="Hako" width="200">
+</p>
 
-A modern clipboard manager for macOS, built with SwiftUI and SwiftData.
-
-> **Hako** (ハコ) means "box" in Japanese — a box for your clipboard history.
+<p align="center">A modern clipboard manager for macOS, built with SwiftUI and SwiftData.</p>
 
 This project is a fork of [Clipy](https://github.com/Clipy/Clipy), fully modernized for macOS 15+.
 
@@ -17,7 +17,6 @@ This project is a fork of [Clipy](https://github.com/Clipy/Clipy), fully moderni
 - Image and color code preview in menu
 - Application exclusion list
 - Screenshot observation
-- Auto-updates via Sparkle
 - Localized: English, Japanese, German, Italian, Chinese (Simplified)
 
 ## What's Changed from Clipy
@@ -44,17 +43,15 @@ This project is a fork of [Clipy](https://github.com/Clipy/Clipy), fully moderni
 ## How to Build
 
 1. Clone the repository
-2. Open `Clipy.xcodeproj` in Xcode 16+
+2. Open `Hako.xcodeproj` in Xcode 16+
 3. Wait for SPM packages to resolve
 4. Build and run (Cmd+R)
 
 ## Dependencies (SPM)
 
-- [Sparkle](https://github.com/sparkle-project/Sparkle) — Auto-updates
 - [Magnet](https://github.com/Clipy/Magnet) — Global keyboard shortcuts
 - [KeyHolder](https://github.com/Clipy/KeyHolder) — Shortcut recording UI
 - [Sauce](https://github.com/Clipy/Sauce) — Key code utilities
-- [RealmSwift](https://github.com/realm/realm-swift) — Legacy data migration (temporary)
 
 ## Contributing
 

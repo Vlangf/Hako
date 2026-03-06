@@ -1,13 +1,13 @@
 strings:
-  paths: Clipy/Resources/en.lproj/Localizable.strings
+  paths: Hako/Resources/en.lproj/Localizable.strings
   templateName: structured-swift5
-  output: Clipy/Generated/LocalizedStrings.swift
+  output: Hako/Generated/LocalizedStrings.swift
 xcassets:
   paths:
-   - Clipy/Resources/Images.xcassets
+   - Hako/Resources/Images.xcassets
   templateName: swift5
-  output: Clipy/Generated/AssetsImages.swift
+  output: Hako/Generated/AssetsImages.swift
 colors:
-  paths: Clipy/Resources/colors.txt
+  paths: Hako/Resources/colors.txt
   templateName: swift5
-  output: Clipy/Generated/Colors.swift
+  output: Hako/Generated/Colors.swift

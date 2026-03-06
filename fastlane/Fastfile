@@ -17,15 +17,15 @@ platform :mac do
   lane :setup_release_id do
     # Update Project Team
     update_project_team(
-      path: "Clipy.xcodeproj",
+      path: "Hako.xcodeproj",
       teamid: "BBCHAJ584H"
     )
     # Update Provisioning Profile
     update_provisioning_profile_specifier(
-      xcodeproj: "Clipy.xcodeproj",
-      new_specifier: "ClipyDistribution",
+      xcodeproj: "Hako.xcodeproj",
+      new_specifier: "HakoDistribution",
       configuration: "Release",
-      target: "^Clipy$"
+      target: "^Hako$"
     )
   end
 
@@ -34,7 +34,7 @@ platform :mac do
   desc "Runs all the tests"
   lane :test do
     slack(message: "Start Testing")
-    scan_clipy
+    scan_hako
     slack(message: "Passed All Tests")
   end
   
@@ -46,10 +46,10 @@ platform :mac do
 
   ####################### PRIVATE LANES ########################
 
-  private_lane :scan_clipy do
+  private_lane :scan_hako do
     scan(
-      project: "Clipy.xcodeproj",
-      scheme: "Clipy",
+      project: "Hako.xcodeproj",
+      scheme: "Hako",
       skip_build: true,
       verbose: true,
       clean: true
@@ -62,7 +62,7 @@ platform :mac do
   end
 
   error do |lane, exception|
-    if lane == :scan_clipy
+    if lane == :scan_hako
       slack(
         message: "Failed Tests: " + ENV['FL_REPORT_PATH'],
         success: false

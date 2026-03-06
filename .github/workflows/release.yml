@@ -16,12 +16,12 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
 
       - name: Resolve SPM packages
-        run: xcodebuild -resolvePackageDependencies -project Clipy.xcodeproj -scheme Clipy
+        run: xcodebuild -resolvePackageDependencies -project Hako.xcodeproj -scheme Hako
 
       - name: Build Release
         run: |
-          xcodebuild -project Clipy.xcodeproj \
-            -scheme Clipy \
+          xcodebuild -project Hako.xcodeproj \
+            -scheme Hako \
             -configuration Release \
             -arch arm64 \
             -derivedDataPath build \
@@ -31,7 +31,7 @@ jobs:
 
       - name: Create DMG
         run: |
-          APP_PATH="build/Build/Products/Release/Clipy.app"
+          APP_PATH="build/Build/Products/Release/Hako.app"
           DMG_NAME="Hako-${GITHUB_REF_NAME}.dmg"
 
           # Create a temporary folder for DMG contents
@@ -49,10 +49,10 @@ jobs:
 
       - name: Create ZIP
         run: |
-          APP_PATH="build/Build/Products/Release/Clipy.app"
+          APP_PATH="build/Build/Products/Release/Hako.app"
           ZIP_NAME="Hako-${GITHUB_REF_NAME}.zip"
           cd build/Build/Products/Release
-          zip -r -y "../../../../$ZIP_NAME" Clipy.app
+          zip -r -y "../../../../$ZIP_NAME" Hako.app
           cd ../../../..
           echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
 

@@ -1,6 +1,6 @@
 included:
-  - Clipy/Sources
-  - ClipyTests
+  - Hako/Sources
+  - HakoTests
 excluded:
   - Pods
 opt_in_rules:
